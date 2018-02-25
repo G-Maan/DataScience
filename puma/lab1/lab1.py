@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-from matplotlib.ticker import MultipleLocator
 import numpy as np
 
 fig = plt.figure()
@@ -9,10 +8,6 @@ ax1.set_ylim((0,1))
 
 low = 1 #inclusive
 high = 7 #exclusive
-
-def rollDice():
-    return np.random.randint(low, high)
-
     
 def gen():
     yield np.random.randint(low, high)
@@ -36,6 +31,8 @@ def animate(i):
     calcProbability()
     print('Probabilities:', rollProbabilities)
     ax1.clear()
+    ax1.set_xlabel('Drawn numbers')
+    ax1.set_ylabel('Probability to be drawn')
     ax1.bar(rollProbabilities.keys(), rollProbabilities.values())
 
     
