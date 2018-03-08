@@ -41,7 +41,7 @@ def animate(i):
     calcMatrixProbability()
     previousRoll = currentRoll
     ax1.clear()
-    ax1.imshow(probabilityMatrix, cmap='hot', interpolation='nearest')
+    ax1.imshow(probabilityMatrix, cmap='hot')
     
-anim = animation.FuncAnimation(fig, animate, interval=500)
+anim = animation.FuncAnimation(fig, animate, interval=100)
 plt.show()

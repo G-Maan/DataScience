@@ -3,7 +3,6 @@ import matplotlib.animation as animation
 
 fig = plt.figure()
 ax1 = fig.add_subplot(1,1,1)
-ax1.set_ylim((0,1))
 
 sample_size = 50000
 affected_low = 1 #1 to 100
@@ -13,7 +12,8 @@ gen = (x for x in range(affected_low, affected_high+1))
 
 def animate(i):
     print('-----------------------------')
-    p_sick = next(gen) / sample_size
+    sick_people = next(gen)
+    p_sick = sick_people / sample_size
     print('Really sick %', p_sick)
     p_not_sick = 1 - p_sick
     print('Really not sick %', p_not_sick)
@@ -45,11 +45,13 @@ def animate(i):
     actually_sick = positive_sick / all_positive
     print('Actually sick =', actually_sick)
     
-    print('Actually sick % =', actually_sick * 100)
+    p_actually_sick = actually_sick * 100
+    print('Actually sick % =', p_actually_sick)
     print('-----------------------------')
     ax1.clear()
+    ax1.set_ylim((0,100))
     ax1.set_ylabel('% actually sick')
-    ax1.bar(1, actually_sick, width=0.8)
+    ax1.bar(1, p_actually_sick, width=0.8)
     
     
 anim = animation.FuncAnimation(fig, animate, interval=100)
