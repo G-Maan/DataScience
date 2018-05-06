@@ -1,0 +1,70 @@
+
+```{r}
+install.packages('mlbench')
+```
+
+```{r}
+library(rpart)
+library(rpart.plot)
+library(caret)
+library(lattice)
+library(ggplot2)
+library(mlbench)
+library(rattle)
+```
+
+```{r}
+data("PimaIndiansDiabetes2", package = 'mlbench')
+data <- PimaIndiansDiabetes2
+head(data)
+summary(data)
+```
+```{r}
+data$class <- data[,9]
+data$diabetes <- NULL
+summary(data)
+```
+```{r}
+#grow a tree
+model <- rpart(class~., data = data, control = rpart.control(cp=0))
+rpart.plot(model)
+printcp(model)
+plotcp(model)
+```
+
+```{r}
+model$cptable
+```
+
+```{r}
+cptable <- as.data.frame(model$cptable)
+cptable$errsd <- cptable$xerror + cptable$xstd
+cpvalue <- cptable[which.min(cptable$errsd), "CP"]
+#prune tree
+pruneModel <- prune(model, 0.007)
+rpart.plot(pruneModel)
+```
+
+```{r}
+pre <- predict(pruneModel, data, type = "class")
+pretable <- table(pre, data$class)
+pretable
+```
+
+```{r}
+accuracy <- sum(diag(pretable))/sum(pretable)
+accuracy
+```
+
+```{r}
+varImp(pruneModel)
+```
+
+```{r}
+precision <- posPredValue(pre, PimaIndiansDiabetes2$diabetes, positive="pos")
+recall <- sensitivity(pre, PimaIndiansDiabetes2$diabetes, positive="pos")
+
+F1 <- (2 * precision * recall) / (precision + recall)
+F1
+```
+
